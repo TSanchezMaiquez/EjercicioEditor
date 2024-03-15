@@ -26,6 +26,7 @@ public class ConsoleEditor implements Editor {
     private final CommandFactory commandFactory = new CommandFactory(this);
     private ArrayList<String> documentLines = new ArrayList<String>();
     private EditorCaretaker editorCaretaker = new EditorCaretaker();
+    private boolean restaurado;
 
     @Override
     public void run() {
@@ -35,7 +36,14 @@ public class ConsoleEditor implements Editor {
             try {
                 Command command = commandFactory.getCommand(commandLine);
                 command.execute(documentLines);
-                editorCaretaker.push(getState());
+                if(!restaurado){
+                    editorCaretaker.push(getState());
+                }else {
+                    restaurado = false;
+                }
+
+
+
             } catch (BadCommandException e) {
                 printErrorToConsole("Bad command");
             } catch (ExitException e) {
@@ -97,6 +105,7 @@ public class ConsoleEditor implements Editor {
         Memento memento = editorCaretaker.pop();
         if (memento != null){
             documentLines = new ArrayList<>(memento.getState());
+            restaurado = true;
         }else {
             reset();
         }

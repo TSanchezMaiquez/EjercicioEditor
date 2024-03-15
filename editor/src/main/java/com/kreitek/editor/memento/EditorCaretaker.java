@@ -10,9 +10,12 @@ public class EditorCaretaker {
         mementos.add(memento);
     }
     public Memento pop() {
-        if (mementos.size() > 0){
-            mementos.remove(mementos.size()-1);
-            return mementos.get(mementos.size()-1);
+        System.out.println(mementos.size());
+
+        if (mementos.size() > 1){
+           mementos.remove(mementos.size()-1);
+           return mementos.get(mementos.size()-1);
+
         }
         return null;
     }
