@@ -1,11 +1,17 @@
 package com.kreitek.editor.commands;
 
 import com.kreitek.editor.BadCommandException;
+import com.kreitek.editor.edit.ConsoleEditor;
 import com.kreitek.editor.interfaces.Command;
 import com.kreitek.editor.ExitException;
 
 public class CommandFactory {
     private static final CommandParser commandParser = new CommandParser();
+    private ConsoleEditor consoleEditor;
+
+    public CommandFactory(ConsoleEditor consoleEditor) {
+        this.consoleEditor = consoleEditor;
+    }
 
     public Command getCommand(String commandLine) throws BadCommandException, ExitException {
         String[] args = commandParser.parse(commandLine);
@@ -19,7 +25,7 @@ public class CommandFactory {
     }
 
     private Command createUndoCommand() {
-        return new UndoCommand();
+        return new UndoCommand(consoleEditor);
     }
 
     private Command createDeleteCommand(String lineNumber) {

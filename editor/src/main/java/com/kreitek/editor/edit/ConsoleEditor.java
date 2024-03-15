@@ -5,8 +5,11 @@ import com.kreitek.editor.ExitException;
 import com.kreitek.editor.commands.CommandFactory;
 import com.kreitek.editor.interfaces.Command;
 import com.kreitek.editor.interfaces.Editor;
+import com.kreitek.editor.memento.EditorCaretaker;
+import com.kreitek.editor.memento.Memento;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleEditor implements Editor {
@@ -20,8 +23,9 @@ public class ConsoleEditor implements Editor {
     public static final String TEXT_CYAN = "\u001B[36m";
     public static final String TEXT_WHITE = "\u001B[37m";
 
-    private final CommandFactory commandFactory = new CommandFactory();
+    private final CommandFactory commandFactory = new CommandFactory(this);
     private ArrayList<String> documentLines = new ArrayList<String>();
+    private EditorCaretaker editorCaretaker = new EditorCaretaker();
 
     @Override
     public void run() {
@@ -31,6 +35,7 @@ public class ConsoleEditor implements Editor {
             try {
                 Command command = commandFactory.getCommand(commandLine);
                 command.execute(documentLines);
+                editorCaretaker.push(getState());
             } catch (BadCommandException e) {
                 printErrorToConsole("Bad command");
             } catch (ExitException e) {
@@ -88,4 +93,21 @@ public class ConsoleEditor implements Editor {
         System.out.print(message);
     }
 
+    public void restore (){
+        Memento memento = editorCaretaker.pop();
+        if (memento != null){
+            documentLines = new ArrayList<>(memento.getState());
+        }else {
+            reset();
+        }
+    }
+    public Memento getState(){
+        List<String> state = new ArrayList<>();
+        state = new ArrayList<>(documentLines);
+        return new Memento (state);
+    }
+
+    public void reset(){
+        documentLines = new ArrayList<>();
+    }
 }
