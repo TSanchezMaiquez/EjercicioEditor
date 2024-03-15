@@ -1,8 +1,10 @@
-package com.kreitek.editor.edit;
+package com.kreitek.editor.utils;
+
+import com.kreitek.editor.interfaces.ConsolePrint;
 
 import java.util.ArrayList;
 
-public class ConsolePrinter {
+public class ConsolePrinterImpl implements ConsolePrint {
 
     public static final String TEXT_RESET = "\u001B[0m";
     public static final String TEXT_BLACK = "\u001B[30m";
@@ -14,7 +16,7 @@ public class ConsolePrinter {
     public static final String TEXT_CYAN = "\u001B[36m";
     public static final String TEXT_WHITE = "\u001B[37m";
 
-    public void showDocumentLines(ArrayList<String> textLines) {
+    public void printDocumentLines(ArrayList<String> textLines) {
         if (textLines.size() > 0){
             setTextColor(TEXT_YELLOW);
             printLnToConsole("START DOCUMENT ==>");

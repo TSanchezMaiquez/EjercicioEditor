@@ -1,7 +1,9 @@
 package com.kreitek.editor;
 
 import com.kreitek.editor.edit.EditorFactory;
+import com.kreitek.editor.interfaces.ConsolePrint;
 import com.kreitek.editor.interfaces.Editor;
+import com.kreitek.editor.utils.ConsolePrinterImpl;
 
 public class Application {
 
